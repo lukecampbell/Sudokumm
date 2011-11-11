@@ -68,3 +68,30 @@ MainWindow::onClose()
 {
 	Gtk::Main::quit();
 }
+
+void
+MainWindow::init_clusters()
+{
+	Square *rows[9];
+	Square *cols[9];
+	Square *boxes[9];
+	//rows
+	for(int i=0;i<9;i++)
+	{
+		for(int j=0;j<9;j++)
+		{
+			int r = (j/3) + (3 * (i/3));
+			int c = (j%3) + (3 * (i%3));
+			rows[j] = &(square[9*i + j]->squareContainer);
+			cols[j] = &(square[9*j + i]->squareContainer);
+			boxes[j] = &(square[9* r + c]->squareContainer);
+
+		}
+		clusters[i] = new Cluster(CLUSTER_ROW,rows);
+		clusters[i+9] = new Cluster(CLUSTER_COL,cols);
+		clusters[i+18] = new Cluster(CLUSTER_BOX,boxes);
+	}
+
+	//cols
+
+}

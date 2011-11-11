@@ -10,6 +10,7 @@
 
 #include <gtkmm.h>
 #include "SudokuSquare.h"
+#include "libsudoku/Cluster.hpp"
 
 class MainWindow : public Gtk::Window
 {

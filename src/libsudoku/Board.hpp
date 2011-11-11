@@ -12,6 +12,7 @@
 #include "Sudoku.hpp"
 #include "Cluster.hpp"
 #include "Square.hpp"
+#include "SquareState.hpp"
 // END INCLUDES AND MACROS //
 
 
@@ -22,7 +23,7 @@
 class Board
 {
   private:
-    Square     board[81];            // The board
+    Square     *board[81];            // The board
     ifstream   board_reader;         // reader for data
 	Cluster    *board_clusters[27];  // the clusters on the board
 

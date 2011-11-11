@@ -8,6 +8,7 @@
 #include "SudokuSquare.h"
 
 static bool checkInput(const Glib::ustring&);
+static void onChange(void *args);
 
 SudokuSquare::SudokuSquare()
 : index(0)
@@ -83,6 +84,7 @@ SudokuSquare::init()
 	entry.signal_focus_out_event().connect(
 	  sigc::mem_fun(*this,&SudokuSquare::onFocusOut)
 	);
+   squareContainer.registerCallback(&onChange);
 }
 
 Glib::ustring
@@ -128,7 +130,10 @@ SudokuSquare::onActivate(SudokuSquare *square)
 		Glib::ustring tmp = getEntry();
 		tmp.resize(1);
 		setLabel(tmp);
-		squareContainer.mark(tmp[0]);
+		if(!squareContainer.mark(tmp[0]))
+		{
+			label.set_markup("<span color=\"#FF0000\">" + tmp + "</span>");
+		}
 	}
 	else
 		setLabel(" ");
@@ -144,4 +149,11 @@ checkInput(const Glib::ustring &s)
 	if(s[0]>='1' && s[0]<='9')
 		return true;
 	return false;
+}
+static void
+onChange(void *args)
+{
+   Square* s = (Square *)args;
+   std::cout<<"Square has changed"<<std::endl
+            <<s<<std::endl;
 }

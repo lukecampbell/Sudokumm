@@ -3,6 +3,8 @@
 gen()
 {
 autoreconf --install
+./configure
+make
 }
 clean()
 {

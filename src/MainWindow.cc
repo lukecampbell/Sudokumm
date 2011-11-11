@@ -13,7 +13,7 @@ MainWindow::MainWindow()
 :clear("Cl_ear",true),close("_Close",true)
 {
 
-	set_title("Agreement");
+	set_title("Sudoku");
 
 	clear.signal_clicked().connect(
 			sigc::mem_fun(*this,&MainWindow::onClear));
@@ -43,7 +43,7 @@ MainWindow::MainWindow()
 	add(cols);
 	cols.show();
 
-
+	init_clusters();
 	show();
 }
 

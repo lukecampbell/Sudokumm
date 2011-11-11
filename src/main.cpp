@@ -7,17 +7,21 @@
 
 #include <gtkmm.h>
 #include <iostream>
+#include "libsudoku/tools.hpp"
+#include "libsudoku/Sudoku.hpp"
 
 #include "MainWindow.h"
 
 
 int main(int argc, char *argv[])
 {
-	Gtk::Main kit(argc, argv);
-
+	Gtk::Main kit(argc,argv);
 	MainWindow mw;
 
+
+
 	Gtk::Main::run(mw);
+
 
 	return EXIT_SUCCESS;
 

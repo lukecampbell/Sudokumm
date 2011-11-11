@@ -28,6 +28,8 @@ private:
 	void handleActivate(SudokuSquare *);
 	void onClear();
 	void onClose();
+	Cluster *clusters[27];
+	void init_clusters();
 
 
 };

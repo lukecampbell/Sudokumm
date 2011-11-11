@@ -29,7 +29,7 @@ MainWindow::MainWindow()
 	{
 		square[i] = new SudokuSquare(i);
 		rows[i/9].pack_start(*square[i],true,true,1);
-		square[i]->set_label(Glib::Ascii::dtostr(i));
+		square[i]->setLabel(" ");
 
 		square[i]->show();
 	}
@@ -59,7 +59,7 @@ MainWindow::onClear()
 {
 	for(int i=0;i<81;i++)
 	{
-		square[i]->set_label(" ");
+		square[i]->setLabel(" ");
 		square[i]->showLabel();
 	}
 }

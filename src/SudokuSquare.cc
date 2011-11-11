@@ -16,9 +16,10 @@ SudokuSquare::SudokuSquare()
 }
 
 SudokuSquare::SudokuSquare(guint index)
-: index(index)
+: index(index), squareContainer(index/9,index%9)
 {
 	init();
+
 }
 
 
@@ -39,8 +40,9 @@ SudokuSquare::signal_entry_activate()
 	return entry.signal_activate();
 }
 
+
 gboolean
-SudokuSquare::set_label(const Glib::ustring &s)
+SudokuSquare::setLabel(const Glib::ustring &s)
 {
 	label.set_label(s);
 	return true;
@@ -78,7 +80,9 @@ SudokuSquare::init()
 	    sigc::mem_fun(*this,&SudokuSquare::onActivate),
 	    this)
 	  );
-
+	entry.signal_focus_out_event().connect(
+	  sigc::mem_fun(*this,&SudokuSquare::onFocusOut)
+	);
 }
 
 Glib::ustring
@@ -103,10 +107,19 @@ SudokuSquare::showLabel()
 gboolean
 SudokuSquare::onClick(GdkEventButton *event, SudokuSquare *square)
 {
-   square->showEntry();
+	square->showEntry();
 	std::cout<<"Square: "<<square->getIndex()<<" was called"<<std::endl;
-   return false;
+	return false;
 }
+
+gboolean
+SudokuSquare::onFocusOut(GdkEventFocus *event)
+{
+	onActivate(this);
+	std::cout<<squareContainer<<std::endl;
+}
+
+
 void
 SudokuSquare::onActivate(SudokuSquare *square)
 {
@@ -114,11 +127,13 @@ SudokuSquare::onActivate(SudokuSquare *square)
 	{
 		Glib::ustring tmp = getEntry();
 		tmp.resize(1);
-		set_label(tmp);
+		setLabel(tmp);
+		squareContainer.mark(tmp[0]);
 	}
 	else
-		set_label(" ");
+		setLabel(" ");
 	showLabel();
+
 }
 
 static bool

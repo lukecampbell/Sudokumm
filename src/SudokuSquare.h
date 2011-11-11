@@ -10,6 +10,7 @@
 
 #include <gtkmm.h>
 #include <iostream>
+#include "libsudoku/Square.hpp"
 
 class SudokuSquare : public Gtk::Frame
 {
@@ -20,11 +21,13 @@ public:
 	Glib::SignalProxy1<bool,GdkEventButton*>
 		signal_button_release_event();
 	Glib::SignalProxy0<void> signal_entry_activate();
-	gboolean set_label(const Glib::ustring &);
+
+	gboolean setLabel(const Glib::ustring &);
 	guint getIndex();
 	Glib::ustring getEntry();
 	void showEntry();
 	void showLabel();
+	Square squareContainer;
 
 protected:
 	guint index;
@@ -34,10 +37,12 @@ protected:
 	Gtk::HBox overlap;
 	gboolean onClick(GdkEventButton *,SudokuSquare *);
 	void onActivate(SudokuSquare *s);
+	gboolean onFocusOut(GdkEventFocus *event);
+
+
 
 private:
 	void init();
-
 
 };
 

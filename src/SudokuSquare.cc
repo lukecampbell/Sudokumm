@@ -7,6 +7,8 @@
 
 #include "SudokuSquare.h"
 
+static bool checkInput(const Glib::ustring&);
+
 SudokuSquare::SudokuSquare()
 : index(0)
 {
@@ -108,6 +110,23 @@ SudokuSquare::onClick(GdkEventButton *event, SudokuSquare *square)
 void
 SudokuSquare::onActivate(SudokuSquare *square)
 {
-	square->set_label(square->getEntry());
-	square->showLabel();
+	if(checkInput(getEntry()))
+	{
+		Glib::ustring tmp = getEntry();
+		tmp.resize(1);
+		set_label(tmp);
+	}
+	else
+		set_label(" ");
+	showLabel();
+}
+
+static bool
+checkInput(const Glib::ustring &s)
+{
+	if(s.length()<1)
+		return false;
+	if(s[0]>='1' && s[0]<='9')
+		return true;
+	return false;
 }

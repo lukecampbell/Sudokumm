@@ -66,6 +66,17 @@ SudokuSquare::init()
 
 
 	eventbox.show();
+	signal_button_release_event().connect(
+	  sigc::bind<SudokuSquare*>(
+	    sigc::mem_fun(*this,&SudokuSquare::onClick),
+		this)
+	);
+	signal_entry_activate().connect(
+	  sigc::bind<SudokuSquare*>(
+	    sigc::mem_fun(*this,&SudokuSquare::onActivate),
+	    this)
+	  );
+
 }
 
 Glib::ustring
@@ -85,4 +96,18 @@ SudokuSquare::showLabel()
 {
 	entry.hide();
 	label.show();
+}
+
+gboolean
+SudokuSquare::onClick(GdkEventButton *event, SudokuSquare *square)
+{
+   square->showEntry();
+	std::cout<<"Square: "<<square->getIndex()<<" was called"<<std::endl;
+   return false;
+}
+void
+SudokuSquare::onActivate(SudokuSquare *square)
+{
+	square->set_label(square->getEntry());
+	square->showLabel();
 }

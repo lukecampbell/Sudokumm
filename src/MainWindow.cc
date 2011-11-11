@@ -30,10 +30,7 @@ MainWindow::MainWindow()
 		square[i] = new SudokuSquare(i);
 		rows[i/9].pack_start(*square[i],true,true,1);
 		square[i]->set_label(Glib::Ascii::dtostr(i));
-		square[i]->signal_button_release_event().connect(
-				sigc::bind<SudokuSquare*>(sigc::mem_fun(*this,&MainWindow::handleClick),square[i]));
-		square[i]->signal_entry_activate().connect(
-				sigc::bind<SudokuSquare*>(sigc::mem_fun(*this,&MainWindow::handleActivate),square[i]));
+
 		square[i]->show();
 	}
 	buttonRow.pack_start(clear);
@@ -55,21 +52,8 @@ MainWindow::~MainWindow()
 	for(int i=0;i<81;i++)
 		delete square[i];
 }
-gboolean
-MainWindow::handleClick(GdkEventButton *event, SudokuSquare *square)
-{
-	square->showEntry();
 
-	std::cout<<"Square: "<<square->getIndex()<<" was called"<<std::endl;
-	return false;
-}
-void
-MainWindow::handleActivate(SudokuSquare *s)
-{
-	s->set_label(s->getEntry());
-	s->showLabel();
 
-}
 void
 MainWindow::onClear()
 {

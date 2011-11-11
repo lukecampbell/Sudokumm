@@ -1,0 +1,7 @@
+Add feature so that on loss of focus each square automatically swaps back to label view and retains the last inputted value
+
+Perform value input checks
+
+Why not move the signal handlers from MainWindow to SudokuSquare?
+
+

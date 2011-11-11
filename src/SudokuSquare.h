@@ -9,6 +9,7 @@
 #define SUDOKUSQUARE_H_
 
 #include <gtkmm.h>
+#include <iostream>
 
 class SudokuSquare : public Gtk::Frame
 {
@@ -31,6 +32,8 @@ protected:
 	Gtk::Label label;
 	Gtk::Entry entry;
 	Gtk::HBox overlap;
+	gboolean onClick(GdkEventButton *,SudokuSquare *);
+	void onActivate(SudokuSquare *s);
 
 private:
 	void init();

@@ -198,12 +198,19 @@ void MainWindow::onLoad()
 
     if (result != Gtk::RESPONSE_OK)
         return;
+    cout<<"Loading from file"<<endl;
     infile.open(dialog.get_filename().c_str(), ifstream::in);
     for (int i = 0; i < 81 && !infile.eof(); i++)
     {
         char c;
+
         infile >> c;
-        square[i]->squareContainer.mark(c);
+
+        Glib::ustring str = " ";
+        if(square[i]->squareContainer.mark(c))
+            str = c;
+        square[i]->setLabel(str);
+
     }
 
     infile.close();

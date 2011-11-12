@@ -27,6 +27,7 @@ public:
 	Glib::ustring getEntry();
 	void showEntry();
 	void showLabel();
+
 	Square squareContainer;
 
 protected:
@@ -38,7 +39,7 @@ protected:
 	gboolean onClick(GdkEventButton *,SudokuSquare *);
 	void onActivate(SudokuSquare *s);
 	gboolean onFocusOut(GdkEventFocus *event);
-
+	void onChange(void *arg);
 
 
 private:

@@ -84,7 +84,7 @@ SudokuSquare::init()
 	entry.signal_focus_out_event().connect(
 	  sigc::mem_fun(*this,&SudokuSquare::onFocusOut)
 	);
-   squareContainer.registerCallback(&onChange);
+
 }
 
 Glib::ustring
@@ -150,8 +150,8 @@ checkInput(const Glib::ustring &s)
 		return true;
 	return false;
 }
-static void
-onChange(void *args)
+
+void SudokuSquare::onChange(void *args)
 {
 
 }

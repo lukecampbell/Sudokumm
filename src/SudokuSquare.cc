@@ -153,7 +153,5 @@ checkInput(const Glib::ustring &s)
 static void
 onChange(void *args)
 {
-   Square* s = (Square *)args;
-   std::cout<<"Square has changed"<<std::endl
-            <<s<<std::endl;
+
 }

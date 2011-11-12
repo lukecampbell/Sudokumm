@@ -19,16 +19,23 @@ public:
 	virtual ~MainWindow();
 protected:
 	SudokuSquare *square[81];
-	Gtk::VBox cols;
+	Gtk::VBox appVBox;
 	Gtk::HBox rows[9];
 	Gtk::HBox buttonRow;
 	Gtk::Button clear;
 	Gtk::Button close;
+
+	Glib::RefPtr<Gtk::ActionGroup> actionGroup;
+	Glib::RefPtr<Gtk::UIManager> uiManager;
+
+
+
 private:
 	gboolean handleClick(GdkEventButton*,SudokuSquare*);
 	void handleActivate(SudokuSquare *);
 	void onClear();
 	void onClose();
+	void buildMenu();
 	Cluster *clusters[27];
 	void init_clusters();
 

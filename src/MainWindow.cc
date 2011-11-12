@@ -49,6 +49,12 @@ MainWindow::~MainWindow()
 {
     for (int i = 0; i < 81; i++)
         delete square[i];
+    while (!frames.empty())
+    {
+        SudokuFrame *frame = frames.top();
+        frames.pop();
+        delete frame;
+    }
 }
 
 void MainWindow::onClear()
@@ -95,63 +101,121 @@ void MainWindow::buildMenu()
     actionGroup = Gtk::ActionGroup::create();
 
     /* Game Menu */
-    actionGroup->add(
-            Gtk::Action::create("GameMenu","_Game"));
+    actionGroup->add(Gtk::Action::create("GameMenu", "_Game"));
 
-    actionGroup->add(
-            Gtk::Action::create("GameNew","_New"));
+    actionGroup->add(Gtk::Action::create("GameNew", "_New"));
 
-    actionGroup->add(
-            Gtk::Action::create("GameLoad","Load"));
+    actionGroup->add(Gtk::Action::create("GameLoad", "_Load"), sigc::mem_fun(
+            *this, &MainWindow::onLoad));
 
-    actionGroup->add(
-            Gtk::Action::create("GameSave","Save"));
+    actionGroup->add(Gtk::Action::create("GameSave", "_Save"), sigc::mem_fun(
+            *this, &MainWindow::onSave));
 
-    actionGroup->add(
-            Gtk::Action::create("GameQuit","Quit"),
-            sigc::mem_fun(*this,&MainWindow::onClose));
+    actionGroup->add(Gtk::Action::create("GameQuit", "_Quit"), sigc::mem_fun(
+            *this, &MainWindow::onClose));
 
     /* About Menu */
 
-    actionGroup->add(
-            Gtk::Action::create("AboutMenu","About"));
+    actionGroup->add(Gtk::Action::create("AboutMenu", "About"));
 
-    actionGroup->add(
-            Gtk::Action::create("AboutAuthor","Author"));
+    actionGroup->add(Gtk::Action::create("AboutAuthor", "Author"));
 
-
-
-
-    Glib::ustring uiLayout =
-            "<ui>"
-            "  <menubar name='MenuBar'>"
-            "    <menu action='GameMenu'>"
-            "      <menuitem action='GameNew' />"
-            "      <menuitem action='GameLoad' />"
-            "      <menuitem action='GameSave' />"
-            "      <menuitem action='GameQuit' />"
-            "    </menu>"
-            "    <menu action='AboutMenu'>"
-            "      <menuitem action='AboutAuthor' />"
-            "    </menu>"
-            "  </menubar>"
-            "</ui>";
+    Glib::ustring uiLayout = "<ui>"
+        "  <menubar name='MenuBar'>"
+        "    <menu action='GameMenu'>"
+        "      <menuitem action='GameNew' />"
+        "      <menuitem action='GameLoad' />"
+        "      <menuitem action='GameSave' />"
+        "      <menuitem action='GameQuit' />"
+        "    </menu>"
+        "    <menu action='AboutMenu'>"
+        "      <menuitem action='AboutAuthor' />"
+        "    </menu>"
+        "  </menubar>"
+        "</ui>";
 
     uiManager = Gtk::UIManager::create();
 
     uiManager->insert_action_group(actionGroup);
 
-
     add_accel_group(uiManager->get_accel_group());
 
-    try {
+    try
+    {
         uiManager->add_ui_from_string(uiLayout);
-    } catch (const Glib::Error &er) {
-        std::cerr<<"Error building menus"<<std::endl;
+    } catch (const Glib::Error &er)
+    {
+        std::cerr << "Error building menus" << std::endl;
     }
 
     Gtk::Widget *widget = uiManager->get_widget("/MenuBar");
-    if(widget)
+    if (widget)
         appVBox.pack_start(*widget);
     appVBox.show_all_children();
+}
+
+void MainWindow::onSave()
+{
+    Gtk::FileChooserDialog dialog("Please choose a file",
+            Gtk::FILE_CHOOSER_ACTION_SAVE);
+    dialog.add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CANCEL);
+    dialog.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_OK);
+    dialog.set_transient_for(*this);
+    ofstream file;
+    int result = dialog.run();
+    switch (result)
+    {
+    case Gtk::RESPONSE_OK:
+        file.open(dialog.get_filename().c_str(), ofstream::out);
+        break;
+    case Gtk::RESPONSE_CANCEL:
+        return;
+        break;
+    default:
+        return;
+    }
+
+    for (int i = 0; i < 81; i++)
+    {
+        file << square[i]->squareContainer.getValue() << " ";
+    }
+
+    file.close();
+
+}
+
+void MainWindow::onLoad()
+{
+    Gtk::FileChooserDialog dialog("Please choose a file",
+            Gtk::FILE_CHOOSER_ACTION_OPEN);
+    dialog.add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CANCEL);
+    dialog.add_button(Gtk::Stock::OPEN, Gtk::RESPONSE_OK);
+    dialog.set_transient_for(*this);
+
+    ifstream infile;
+
+    int result = dialog.run();
+
+    if (result != Gtk::RESPONSE_OK)
+        return;
+    infile.open(dialog.get_filename().c_str(), ifstream::in);
+    for (int i = 0; i < 81 && !infile.eof(); i++)
+    {
+        char c;
+        infile >> c;
+        square[i]->squareContainer.mark(c);
+    }
+
+    infile.close();
+
+}
+
+void MainWindow::pushFrame()
+{
+    SudokuFrame *frame = new SudokuFrame;
+    for (int i = 0; i < 81; i++)
+    {
+        frame->squares[i] = square[i]->squareContainer;
+    }
+    frames.push(frame);
 }

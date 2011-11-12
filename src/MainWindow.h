@@ -9,8 +9,15 @@
 #define MAINWINDOW_H_
 
 #include <gtkmm.h>
+#include <stack>
+
 #include "SudokuSquare.h"
 #include "libsudoku/Cluster.hpp"
+
+struct SudokuFrame
+{
+    Square squares[81];
+};
 
 class MainWindow : public Gtk::Window
 {
@@ -28,7 +35,7 @@ protected:
 	Glib::RefPtr<Gtk::ActionGroup> actionGroup;
 	Glib::RefPtr<Gtk::UIManager> uiManager;
 
-
+	std::stack<SudokuFrame *> frames;
 
 private:
 	gboolean handleClick(GdkEventButton*,SudokuSquare*);
@@ -36,8 +43,13 @@ private:
 	void onClear();
 	void onClose();
 	void buildMenu();
+
+	void onSave();
+	void onLoad();
+
 	Cluster *clusters[27];
 	void init_clusters();
+	void pushFrame();
 
 
 };

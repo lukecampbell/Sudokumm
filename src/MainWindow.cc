@@ -8,7 +8,7 @@
 #include "MainWindow.h"
 
 MainWindow::MainWindow() :
-    clear("Cl_ear", true), close("_Close", true), back("_Back",true)
+    clear("Cl_ear", true), close("_Close", true), back("_Back", true)
 {
     build();
 }
@@ -35,20 +35,20 @@ void MainWindow::build()
 
     clear.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::onClear));
     close.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::onClose));
-    back.signal_clicked().connect(sigc::mem_fun(*this,&MainWindow::onBack));
-    for(int i=0;i<3;i++)
+    back.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::onBack));
+    for (int i = 0; i < 3; i++)
     {
-        appVBox.pack_start(subrows[i],true,true,2);
+        appVBox.pack_start(subrows[i], true, true, 2);
         subrows[i].show();
     }
     for (int i = 0; i < 9; i++)
     {
-        subrows[i/3].pack_start(rows[i], true, true, 1);
+        subrows[i / 3].pack_start(rows[i], true, true, 1);
         rows[i].show();
     }
-    for(int i=0;i<27;i++)
+    for (int i = 0; i < 27; i++)
     {
-        rows[i/3].pack_start(subcols[i],true,true,2);
+        rows[i / 3].pack_start(subcols[i], true, true, 2);
         subcols[i].show();
     }
     for (int i = 0; i < 81; i++)
@@ -62,7 +62,6 @@ void MainWindow::build()
     buttonRow.pack_start(back);
     buttonRow.pack_start(clear);
     buttonRow.pack_start(close);
-
 
     buttonRow.show_all();
     appVBox.pack_start(buttonRow);
@@ -185,6 +184,17 @@ void MainWindow::onSave()
     dialog.add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CANCEL);
     dialog.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_OK);
     dialog.set_transient_for(*this);
+
+    Glib::RefPtr<Gtk::FileFilter> filter = Gtk::FileFilter::create();
+    filter->set_name("Sudoku Save File");
+    filter->add_pattern("*.sud");
+    dialog.add_filter(filter);
+
+    filter = Gtk::FileFilter::create();
+    filter->set_name("All Files");
+    filter->add_pattern("*");
+    dialog.add_filter(filter);
+
     ofstream file;
     int result = dialog.run();
     switch (result)
@@ -216,13 +226,25 @@ void MainWindow::onLoad()
     dialog.add_button(Gtk::Stock::OPEN, Gtk::RESPONSE_OK);
     dialog.set_transient_for(*this);
 
+    Glib::RefPtr<Gtk::FileFilter> filter = Gtk::FileFilter::create();
+    filter->set_name("Sudoku Save File");
+    filter->add_pattern("*.sud");
+    dialog.add_filter(filter);
+
+    filter = Gtk::FileFilter::create();
+    filter->set_name("All Files");
+    filter->add_pattern("*");
+    dialog.add_filter(filter);
+
     ifstream infile;
 
     int result = dialog.run();
 
     if (result != Gtk::RESPONSE_OK)
         return;
+#ifdef __DEBUG__
     cout << "Loading from file" << endl;
+#endif
     infile.open(dialog.get_filename().c_str(), ifstream::in);
     for (int i = 0; i < 81 && !infile.eof(); i++)
     {
@@ -233,7 +255,7 @@ void MainWindow::onLoad()
         Glib::ustring str = " ";
         if (square[i]->squareContainer.mark(c))
             str = c;
-        if (c == '-' || c=='0')
+        if (c == '-' || c == '0')
             str = " ";
         square[i]->setLabel(str);
 

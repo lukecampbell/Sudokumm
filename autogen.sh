@@ -3,7 +3,10 @@
 gen()
 {
 autoreconf --install
-./configure
+}
+build()
+{
+./configure CXXFLAGS="-g -ggdb -O0"
 make
 }
 clean()
@@ -17,6 +20,9 @@ rm -rf aclocal.m4 autom4te.cache config.log config.status configure depcomp inst
 
 if [[ $1 == 'clean' ]]; then
 clean
+elif [[ $1 == 'build' ]]; then
+gen
+build
 else
 gen
 fi	

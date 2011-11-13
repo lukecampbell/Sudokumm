@@ -112,7 +112,9 @@ gboolean
 SudokuSquare::onClick(GdkEventButton *event, SudokuSquare *square)
 {
 	square->showEntry();
+#ifdef __DEBUG__
 	std::cout<<"Square: "<<square->getIndex()<<" was called"<<std::endl;
+#endif
 	return false;
 }
 

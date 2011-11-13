@@ -12,6 +12,8 @@
 #include <iostream>
 #include "libsudoku/Square.hpp"
 
+typedef void (*SudokuCallback)(void *);
+
 class SudokuSquare : public Gtk::Frame
 {
 public:
@@ -27,6 +29,7 @@ public:
 	Glib::ustring getEntry();
 	void showEntry();
 	void showLabel();
+	void registerCallback(SudokuCallback);
 
 	Square squareContainer;
 
@@ -39,11 +42,12 @@ protected:
 	gboolean onClick(GdkEventButton *,SudokuSquare *);
 	void onActivate(SudokuSquare *s);
 	gboolean onFocusOut(GdkEventFocus *event);
-	void onChange(void *arg);
+	gboolean onEnter(GdkEventCrossing *);
 
 
 private:
 	void init();
+	SudokuCallback onChange;
 
 };
 

@@ -68,8 +68,8 @@ SudokuSquare::init()
 	entry.hide();
 	overlap.show();
 	eventbox.set_events(Gdk::BUTTON_RELEASE_MASK | Gdk::KEY_PRESS_MASK);
-
-
+	eventbox.signal_enter_notify_event().connect(
+	        sigc::mem_fun(*this,&SudokuSquare::onEnter));
 	eventbox.show();
 	signal_button_release_event().connect(
 	  sigc::bind<SudokuSquare*>(
@@ -84,6 +84,8 @@ SudokuSquare::init()
 	entry.signal_focus_out_event().connect(
 	  sigc::mem_fun(*this,&SudokuSquare::onFocusOut)
 	);
+	Glib::ustring str = squareContainer.possibilitiesString();
+	eventbox.set_tooltip_text(str);
 
 }
 
@@ -134,6 +136,7 @@ SudokuSquare::onActivate(SudokuSquare *square)
 		{
 			label.set_markup("<span color=\"#FF0000\">" + tmp + "</span>");
 		}
+
 	}
 	else
 		setLabel(" ");
@@ -151,7 +154,14 @@ checkInput(const Glib::ustring &s)
 	return false;
 }
 
-void SudokuSquare::onChange(void *args)
-{
 
+gboolean SudokuSquare::onEnter(GdkEventCrossing *arg)
+{
+    Glib::ustring str = squareContainer.possibilitiesString();
+    eventbox.set_tooltip_text(str);
+}
+
+void SudokuSquare::registerCallback(SudokuCallback callback)
+{
+    onChange = callback;
 }

@@ -8,41 +8,9 @@
 #include "MainWindow.h"
 
 MainWindow::MainWindow() :
-    clear("Cl_ear", true), close("_Close", true)
+    clear("Cl_ear", true), close("_Close", true), back("_Back",true)
 {
-
-    set_title("Sudoku");
-    set_position(Gtk::WIN_POS_CENTER);
-
-    buildMenu();
-
-    clear.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::onClear));
-    close.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::onClose));
-
-    for (int i = 0; i < 9; i++)
-    {
-        appVBox.pack_start(rows[i], true, true, 1);
-        rows[i].show();
-    }
-    for (int i = 0; i < 81; i++)
-    {
-        square[i] = new SudokuSquare(i);
-        rows[i / 9].pack_start(*square[i], true, true, 1);
-        square[i]->setLabel(" ");
-
-        square[i]->show();
-    }
-    buttonRow.pack_start(clear);
-    buttonRow.pack_start(close);
-
-    buttonRow.show_all();
-    appVBox.pack_start(buttonRow);
-
-    add(appVBox);
-    appVBox.show();
-
-    init_clusters();
-    show();
+    build();
 }
 
 MainWindow::~MainWindow()
@@ -57,10 +25,52 @@ MainWindow::~MainWindow()
     }
 }
 
+void MainWindow::build()
+{
+
+    set_title("Sudoku");
+    set_position(Gtk::WIN_POS_CENTER);
+
+    buildMenu();
+
+    clear.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::onClear));
+    close.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::onClose));
+    back.signal_clicked().connect(sigc::mem_fun(*this,&MainWindow::onBack));
+
+    for (int i = 0; i < 9; i++)
+    {
+        appVBox.pack_start(rows[i], true, true, 1);
+        rows[i].show();
+    }
+    for (int i = 0; i < 81; i++)
+    {
+        square[i] = new SudokuSquare(i);
+        rows[i / 9].pack_start(*square[i], true, true, 1);
+        square[i]->setLabel(" ");
+
+        square[i]->show();
+    }
+    buttonRow.pack_start(back);
+    buttonRow.pack_start(clear);
+    buttonRow.pack_start(close);
+
+
+    buttonRow.show_all();
+    appVBox.pack_start(buttonRow);
+
+    add(appVBox);
+    appVBox.show();
+
+    init_clusters();
+    show();
+
+}
+
 void MainWindow::onClear()
 {
     for (int i = 0; i < 81; i++)
     {
+        square[i]->squareContainer.mark('-');
         square[i]->setLabel(" ");
         square[i]->showLabel();
     }
@@ -68,6 +78,11 @@ void MainWindow::onClear()
 void MainWindow::onClose()
 {
     Gtk::Main::quit();
+}
+
+void MainWindow::onBack()
+{
+
 }
 
 void MainWindow::init_clusters()
@@ -198,7 +213,7 @@ void MainWindow::onLoad()
 
     if (result != Gtk::RESPONSE_OK)
         return;
-    cout<<"Loading from file"<<endl;
+    cout << "Loading from file" << endl;
     infile.open(dialog.get_filename().c_str(), ifstream::in);
     for (int i = 0; i < 81 && !infile.eof(); i++)
     {
@@ -207,8 +222,10 @@ void MainWindow::onLoad()
         infile >> c;
 
         Glib::ustring str = " ";
-        if(square[i]->squareContainer.mark(c))
+        if (square[i]->squareContainer.mark(c))
             str = c;
+        if (c == '-')
+            str = " ";
         square[i]->setLabel(str);
 
     }

@@ -31,6 +31,7 @@ protected:
 	Gtk::HBox buttonRow;
 	Gtk::Button clear;
 	Gtk::Button close;
+	Gtk::Button back;
 
 	Glib::RefPtr<Gtk::ActionGroup> actionGroup;
 	Glib::RefPtr<Gtk::UIManager> uiManager;
@@ -42,7 +43,9 @@ private:
 	void handleActivate(SudokuSquare *);
 	void onClear();
 	void onClose();
+	void onBack();
 	void buildMenu();
+	void build();
 
 	void onSave();
 	void onLoad();
@@ -50,6 +53,7 @@ private:
 	Cluster *clusters[27];
 	void init_clusters();
 	void pushFrame();
+	void popFrame();
 
 
 };

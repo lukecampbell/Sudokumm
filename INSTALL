@@ -1,0 +1,7 @@
+First compile and make libsudoku
+copy libsudoku.a to ./src/
+
+then run ./configure
+make
+
+please don't run make install, it's not conigured correctly for an install, run locally from this directory.

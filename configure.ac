@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.65])
-AC_INIT([gtkmmlearn], [0.01], [luke.s.campbell@gmail.com])
+AC_INIT([sudokumm], [0.01], [luke.s.campbell@gmail.com])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_HEADERS([src/config.h])

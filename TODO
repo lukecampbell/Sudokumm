@@ -7,3 +7,4 @@ Why not move the signal handlers from MainWindow to SudokuSquare?
 
 I need to add an event handler for when a Square's value changes
 
+Make 0, a blank when read from a saved file

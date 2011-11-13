@@ -36,16 +36,25 @@ void MainWindow::build()
     clear.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::onClear));
     close.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::onClose));
     back.signal_clicked().connect(sigc::mem_fun(*this,&MainWindow::onBack));
-
+    for(int i=0;i<3;i++)
+    {
+        appVBox.pack_start(subrows[i],true,true,2);
+        subrows[i].show();
+    }
     for (int i = 0; i < 9; i++)
     {
-        appVBox.pack_start(rows[i], true, true, 1);
+        subrows[i/3].pack_start(rows[i], true, true, 1);
         rows[i].show();
+    }
+    for(int i=0;i<27;i++)
+    {
+        rows[i/3].pack_start(subcols[i],true,true,2);
+        subcols[i].show();
     }
     for (int i = 0; i < 81; i++)
     {
         square[i] = new SudokuSquare(i);
-        rows[i / 9].pack_start(*square[i], true, true, 1);
+        subcols[i / 3].pack_start(*square[i], true, true, 1);
         square[i]->setLabel(" ");
 
         square[i]->show();
@@ -224,7 +233,7 @@ void MainWindow::onLoad()
         Glib::ustring str = " ";
         if (square[i]->squareContainer.mark(c))
             str = c;
-        if (c == '-')
+        if (c == '-' || c=='0')
             str = " ";
         square[i]->setLabel(str);
 

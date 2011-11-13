@@ -28,6 +28,8 @@ protected:
 	SudokuSquare *square[81];
 	Gtk::VBox appVBox;
 	Gtk::HBox rows[9];
+	Gtk::HBox subcols[27];
+	Gtk::VBox subrows[3];
 	Gtk::HBox buttonRow;
 	Gtk::Button clear;
 	Gtk::Button close;

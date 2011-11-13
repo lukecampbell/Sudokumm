@@ -15,7 +15,6 @@ SudokuSquare::SudokuSquare()
 {
 	init();
 }
-
 SudokuSquare::SudokuSquare(guint index)
 : index(index), squareContainer(index/9,index%9)
 {

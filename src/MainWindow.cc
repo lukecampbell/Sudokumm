@@ -7,12 +7,19 @@
 #include <iostream>
 #include "MainWindow.h"
 
+/**
+ * MainWindow()
+ * Builds the basic graphical interface
+ */
 MainWindow::MainWindow() :
     clear("Cl_ear", true), close("_Close", true), back("_Back", true)
 {
     build();
 }
-
+/**
+ * ~MainWindow()
+ * Deletes all the squares and pops all the frames in the stack
+ */
 MainWindow::~MainWindow()
 {
     for (int i = 0; i < 81; i++)
@@ -25,6 +32,10 @@ MainWindow::~MainWindow()
     }
 }
 
+/**
+ * build()
+ * Builds the GUI and links the callbacks and signal handlers
+ */
 void MainWindow::build()
 {
 
@@ -59,7 +70,7 @@ void MainWindow::build()
 
         square[i]->show();
     }
-    buttonRow.pack_start(back);
+//    buttonRow.pack_start(back);
     buttonRow.pack_start(clear);
     buttonRow.pack_start(close);
 
@@ -73,7 +84,11 @@ void MainWindow::build()
     show();
 
 }
-
+/**
+ * onClear()
+ * Clears all squares in the application.  Sets each label to blank/space,
+ * and forces each square to show a label
+ */
 void MainWindow::onClear()
 {
     for (int i = 0; i < 81; i++)
@@ -83,16 +98,26 @@ void MainWindow::onClear()
         square[i]->showLabel();
     }
 }
+/**
+ * onClose()
+ * Quits the application
+ */
 void MainWindow::onClose()
 {
     Gtk::Main::quit();
 }
-
+/**
+ * onBack()
+ * Yet to implemented.  Evenetually it will allow the user to go back
+ */
 void MainWindow::onBack()
 {
 
 }
-
+/**
+ * init_clusters()
+ * Initializes all the clusters for each square, and links the squares to them.
+ */
 void MainWindow::init_clusters()
 {
     Square *rows[9];
@@ -118,7 +143,10 @@ void MainWindow::init_clusters()
     //cols
 
 }
-
+/**
+ * buildMenu()
+ * Builds the menu for the GUI, I still need to implement the authors dialog
+ */
 void MainWindow::buildMenu()
 {
     actionGroup = Gtk::ActionGroup::create();
@@ -176,7 +204,10 @@ void MainWindow::buildMenu()
         appVBox.pack_start(*widget);
     appVBox.show_all_children();
 }
-
+/**
+ * onSave()
+ * Presents a Save File dialog to the user to save the current game state
+ */
 void MainWindow::onSave()
 {
     Gtk::FileChooserDialog dialog("Please choose a file",
@@ -217,7 +248,10 @@ void MainWindow::onSave()
     file.close();
 
 }
-
+/**
+ * onLoad()
+ * Presents a dialog to load a file to load the state of the application
+ */
 void MainWindow::onLoad()
 {
     Gtk::FileChooserDialog dialog("Please choose a file",
@@ -264,7 +298,11 @@ void MainWindow::onLoad()
     infile.close();
 
 }
-
+/**
+ * pushFrame()
+ * Pushes the current state onto the Frame stack.  To be used as a mechanism
+ * to go back
+ */
 void MainWindow::pushFrame()
 {
     SudokuFrame *frame = new SudokuFrame;

@@ -44,7 +44,7 @@ SudokuSquare::signal_entry_activate()
 gboolean
 SudokuSquare::setLabel(const Glib::ustring &s)
 {
-	label.set_label(s);
+	label.set_markup(s);
 	return true;
 }
 guint

@@ -280,6 +280,9 @@ void MainWindow::onLoad()
     cout << "Loading from file" << endl;
 #endif
     infile.open(dialog.get_filename().c_str(), ifstream::in);
+    if(infile.fail())
+        return;
+    onClear();
     for (int i = 0; i < 81 && !infile.eof(); i++)
     {
         char c;
@@ -287,9 +290,25 @@ void MainWindow::onLoad()
         infile >> c;
 
         Glib::ustring str = " ";
+
         if (square[i]->squareContainer.mark(c))
             str = c;
-        if (c == '-' || c == '0')
+
+        // If the character is legal but inappropriate for the square
+        // set it anyway and color it red.
+        else if(c>='1' && c<='9')
+        {
+            str = "<span color=\"#FF0000\">";
+            str += c;
+            str += "</span>";
+        }
+        // Handle illegal chars
+        else
+        {
+            str = " ";
+        }
+        // blanks are legal so we need to mark them as empty squares in the gui
+        if (c == '0' || c=='-' )
             str = " ";
         square[i]->setLabel(str);
 

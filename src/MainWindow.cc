@@ -1,8 +1,24 @@
 /*
+ * Sudokumm 
+ * Copyright 2011 Luke Campbell
+ *
  * MainWindow.cc
  *
- *  Created on: Oct 10, 2011
- *      Author: luke
+ *  Created on: 14 November 2011
+ *  Author: Luke campbell
+ * 
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Lesser General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <iostream>
 #include "MainWindow.h"
@@ -14,6 +30,7 @@
 MainWindow::MainWindow() :
     clear("Cl_ear", true), close("_Close", true), back("_Back", true)
 {
+    Glib::set_application_name("Sudokumm");
     build();
 }
 /**
@@ -167,9 +184,10 @@ void MainWindow::buildMenu()
 
     /* About Menu */
 
-    actionGroup->add(Gtk::Action::create("AboutMenu", "About"));
+    actionGroup->add(Gtk::Action::create("AboutMenu", "_About"));
 
-    actionGroup->add(Gtk::Action::create("AboutAuthor", "Author"));
+    actionGroup->add(Gtk::Action::create("AboutAuthor", "A_uthor"),
+            sigc::mem_fun(*this,&MainWindow::onAbout));
 
     Glib::ustring uiLayout = "<ui>"
         "  <menubar name='MenuBar'>"
@@ -316,6 +334,12 @@ void MainWindow::onLoad()
 
     infile.close();
 
+}
+
+void MainWindow::onAbout()
+{
+    AboutBox ab;
+    ab.run();
 }
 /**
  * pushFrame()

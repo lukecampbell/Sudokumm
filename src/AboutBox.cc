@@ -2,7 +2,7 @@
  * Sudokumm 
  * Copyright 2011 Luke Campbell
  *
- * SquareContainer.cc
+ * AboutBox.cc
  *
  *  Created on: 14 November 2011
  *  Author: Luke campbell
@@ -21,5 +21,22 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "SquareContainer.h"
+#include "AboutBox.h"
+
+AboutBox::AboutBox()
+{
+    std::vector<Glib::ustring> aauthors;
+    Glib::RefPtr<Gdk::Pixbuf> logo;
+
+    aauthors.push_back("Luke Campbell");
+    set_version("0.02b");
+    set_website("http://www.github.com/lukecampbell/Sudokumm");
+    set_authors(aauthors);
+    set_website_label("Sudokumm @ github");
+    set_copyright("Copyright 2011 Luke Campbell");
+    set_license_type(Gtk::LICENSE_LGPL_3_0);
+    logo = Gdk::Pixbuf::create_from_xpm_data(sudokumm_xpm);
+    set_logo(logo);
+
+}
 

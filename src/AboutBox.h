@@ -2,8 +2,7 @@
  * Sudokumm 
  * Copyright 2011 Luke Campbell
  *
- * SquareContainer.cc
- *
+ * AboutBox.h
  *  Created on: 14 November 2011
  *  Author: Luke campbell
  * 
@@ -21,5 +20,21 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "SquareContainer.h"
+#ifndef ABOUTBOX_H_
+#define ABOUTBOX_H_
 
+#include <gtkmm.h>
+extern const char *gplv2;
+extern const char *sudokumm_xpm[];
+
+class AboutBox : public Gtk::AboutDialog
+{
+
+public:
+    AboutBox();
+    ~AboutBox() {}
+
+};
+
+
+#endif /* ABOUTBOX_H_ */
